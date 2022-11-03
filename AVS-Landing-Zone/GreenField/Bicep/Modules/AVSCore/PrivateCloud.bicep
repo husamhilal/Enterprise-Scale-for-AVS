@@ -10,9 +10,6 @@ resource PrivateCloud 'Microsoft.AVS/privateClouds@2021-12-01' = {
   sku: {
     name: SKUName
   }
-  identity: {
-    type: 'SystemAssigned'
-  }
   location: Location
   properties: {
     networkBlock: NetworkBlock
