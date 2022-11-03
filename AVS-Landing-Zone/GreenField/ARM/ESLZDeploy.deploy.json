@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.11.1.770",
-      "templateHash": "16252221738617703439"
+      "templateHash": "15763059229355061790"
     }
   },
   "parameters": {
@@ -121,6 +121,21 @@
         "description": "The sku to use for the Jumpbox VM, must have quota for this within the target region"
       }
     },
+    "OSVersion": {
+      "type": "string",
+      "defaultValue": "2022-datacenter-azure-edition-smalldisk",
+      "allowedValues": [
+        "2016-Datacenter",
+        "2016-Datacenter-smalldisk",
+        "2019-Datacenter",
+        "2019-Datacenter-smalldisk",
+        "2022-datacenter-azure-edition",
+        "2022-datacenter-azure-edition-smalldisk"
+      ],
+      "metadata": {
+        "description": "The OS Version for the Jumpbox VM. By default, it is Microsoft Windows Server 2012 Azure Edition with small disk for storage to reduce costs."
+      }
+    },
     "BootstrapJumpboxVM": {
       "type": "bool",
       "defaultValue": false,
@@ -130,7 +145,7 @@
     },
     "BootstrapPath": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/husamhilal/Enterprise-Scale-for-AVS/main/AVS-Landing-Zone/GreenField/Scripts/bootstrap.ps1",
+      "defaultValue": "https://raw.githubusercontent.com/Azure/Enterprise-Scale-for-AVS/main/AVS-Landing-Zone/GreenField/Scripts/bootstrap.ps1",
       "metadata": {
         "description": "The path for Jumpbox VM bootstrap PowerShell script file (expecting \"bootstrap.ps1\" file)"
       }
@@ -229,7 +244,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.11.1.770",
-              "templateHash": "7963207558726733320"
+              "templateHash": "936018325062142087"
             }
           },
           "parameters": {
@@ -296,7 +311,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.11.1.770",
-                      "templateHash": "4668649072318594386"
+                      "templateHash": "2796678212746091291"
                     }
                   },
                   "parameters": {
@@ -326,9 +341,6 @@
                       "name": "[format('{0}-SDDC', parameters('Prefix'))]",
                       "sku": {
                         "name": "[parameters('SKUName')]"
-                      },
-                      "identity": {
-                        "type": "SystemAssigned"
                       },
                       "location": "[parameters('Location')]",
                       "properties": {
@@ -1059,6 +1071,9 @@
           "JumpboxSku": {
             "value": "[parameters('JumpboxSku')]"
           },
+          "OSVersion": {
+            "value": "[parameters('OSVersion')]"
+          },
           "BootstrapJumpboxVM": {
             "value": "[parameters('BootstrapJumpboxVM')]"
           },
@@ -1076,7 +1091,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.11.1.770",
-              "templateHash": "342319162266186431"
+              "templateHash": "1106067062403669925"
             }
           },
           "parameters": {
@@ -1102,6 +1117,9 @@
               "type": "string"
             },
             "JumpboxSku": {
+              "type": "string"
+            },
+            "OSVersion": {
               "type": "string"
             },
             "BootstrapJumpboxVM": {
@@ -1317,6 +1335,9 @@
                   "VMSize": {
                     "value": "[parameters('JumpboxSku')]"
                   },
+                  "OSVersion": {
+                    "value": "[parameters('OSVersion')]"
+                  },
                   "BootstrapVM": {
                     "value": "[parameters('BootstrapJumpboxVM')]"
                   },
@@ -1334,7 +1355,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.11.1.770",
-                      "templateHash": "18137590009420842615"
+                      "templateHash": "5119768008941871421"
                     }
                   },
                   "parameters": {
@@ -1357,8 +1378,7 @@
                       "type": "string"
                     },
                     "OSVersion": {
-                      "type": "string",
-                      "defaultValue": "2022-datacenter-azure-edition-smalldisk"
+                      "type": "string"
                     },
                     "BootstrapVM": {
                       "type": "bool",
