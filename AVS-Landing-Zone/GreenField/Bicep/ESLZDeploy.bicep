@@ -17,11 +17,7 @@ param PrivateCloudAddressSpace string
 ])
 param PrivateCloudSKU string = 'AV36'
 @description('Optional: Connectivity to Internet through Managed SNAT Service')
-@allowed([
-  'Disabled'
-  'Enabled'
-])
-param Internet string = 'Disabled'
+param EnableInternet bool = false
 @description('The number of nodes to be deployed in the first/default cluster, ensure you have quota before deploying')
 param PrivateCloudHostCount int = 3
 
@@ -92,7 +88,7 @@ module AVSCore 'Modules/AVSCore.bicep' = {
     PrivateCloudAddressSpace: PrivateCloudAddressSpace
     PrivateCloudHostCount: PrivateCloudHostCount
     PrivateCloudSKU: PrivateCloudSKU
-    Internet: Internet
+    EnableInternet: EnableInternet
   }
 }
 

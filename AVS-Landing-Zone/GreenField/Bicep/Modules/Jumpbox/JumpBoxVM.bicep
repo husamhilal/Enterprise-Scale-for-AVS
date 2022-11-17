@@ -70,13 +70,13 @@ resource VM 'Microsoft.Compute/virtualMachines@2021-03-01' = {
   }
 }
 
-resource Bootstrap 'Microsoft.Compute/virtualMachines/extensions@2015-06-15' = if(BootstrapVM) {
+resource Bootstrap 'Microsoft.Compute/virtualMachines/extensions@2021-04-01' = if(BootstrapVM) {
   name: '${VM.name}/CustomScriptExtension'
   location: Location
   properties: {
     publisher: 'Microsoft.Compute'
     type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.9'
+    typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
     settings: {
       fileUris: [
