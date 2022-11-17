@@ -10,38 +10,51 @@ param Location string = deployment().location
 
 @description('The address space used for the AVS Private Cloud management networks. Must be a non-overlapping /22')
 param PrivateCloudAddressSpace string
+
 @description('The SKU that should be used for the first cluster, ensure you have quota for the given SKU before deploying')
 @allowed([
   'AV36'
   'AV36T'
 ])
 param PrivateCloudSKU string = 'AV36'
+
 @description('Optional: Connectivity to Internet through Managed SNAT Service')
 param EnableInternet bool = false
+
+@description('Optional: Assign Jumpbox VM as Contributor on AVS Private Cloud')
+param AssignJumpboxAsAVSContributor bool = false
+
 @description('The number of nodes to be deployed in the first/default cluster, ensure you have quota before deploying')
 param PrivateCloudHostCount int = 3
 
 @description('Set this to true if you are redeploying, and the VNet already exists')
 param VNetExists bool = false
+
 @description('The address space used for the VNet attached to AVS. Must be non-overlapping with existing networks')
 param VNetAddressSpace string
+
 @description('The subnet CIDR used for the Gateway Subnet. Must be a /24 or greater within the VNetAddressSpace')
 param VNetGatewaySubnet string
 
 @description('Email addresses to be added to the alerting action group. Use the format ["name1@domain.com","name2@domain.com"].')
 param AlertEmails array = []
-@description('Should a Jumpbox & Bastion be deployed to access the Private Cloud')
 
+@description('Should a Jumpbox & Bastion be deployed to access the Private Cloud')
 param DeployJumpbox bool = false
+
 @description('Username for the Jumpbox VM')
 param JumpboxUsername string = 'avsjump'
+
 @secure()
 @description('Password for the Jumpbox VM, can be changed later')
 param JumpboxPassword string = ''
+
 @description('The subnet CIDR used for the Jumpbox VM Subnet. Must be a /26 or greater within the VNetAddressSpace')
 param JumpboxSubnet string = ''
+
 @description('The sku to use for the Jumpbox VM, must have quota for this within the target region')
 param JumpboxSku string = 'Standard_D2s_v3'
+
 @description('The OS Version for the Jumpbox VM. By default, it is Microsoft Windows Server 2012 Azure Edition with small disk for storage to reduce costs.')
 @allowed([
   '2016-Datacenter'
@@ -52,21 +65,28 @@ param JumpboxSku string = 'Standard_D2s_v3'
   '2022-datacenter-azure-edition-smalldisk'
 ])
 param OSVersion string  = '2022-datacenter-azure-edition-smalldisk'
+
 @description('Should run a bootstrap PowerShell script on the Jumpbox VM or not')
 param BootstrapJumpboxVM bool = false
+
 @description('The path for Jumpbox VM bootstrap PowerShell script file (expecting "bootstrap.ps1" file)')
 param BootstrapPath string = 'https://raw.githubusercontent.com/Azure/Enterprise-Scale-for-AVS/main/AVS-Landing-Zone/GreenField/Scripts/bootstrap.ps1'
+
 @description('The command to trigger running the bootstrap script. If was not provided, then the expected script file name must be "bootstrap.ps1")')
 param BootstrapCommand string = 'powershell.exe -ExecutionPolicy Unrestricted -File bootstrap.ps1'
+
 @description('The subnet CIDR used for the Bastion Subnet. Must be a /26 or greater within the VNetAddressSpace')
 param BastionSubnet string = ''
 
 @description('Should HCX be deployed as part of the deployment')
 param DeployHCX bool = true
+
 @description('Should SRM be deployed as part of the deployment')
 param DeploySRM bool = false
+
 @description('License key to be used if SRM is deployed')
 param SRMLicenseKey string = ''
+
 @minValue(1)
 @maxValue(10)
 @description('Number of vSphere Replication Servers to be created if SRM is deployed')
@@ -124,6 +144,15 @@ module Addons 'Modules/AVSAddons.bicep' = {
     DeploySRM: DeploySRM
     SRMLicenseKey: SRMLicenseKey
     VRServerCount: VRServerCount
+  }
+}
+
+module RBAC 'Modules/AVSRBAC.bicep' = if(AssignJumpboxAsAVSContributor) {
+  name: '${deploymentPrefix}-Contributor-RBAC'
+  params: {
+    PrivateCloudName: AVSCore.outputs.PrivateCloudName
+    PrivateCloudResourceGroup: AVSCore.outputs.PrivateCloudResourceGroupName
+    JumpboxSAMIPrincipalId: Jumpbox.outputs.JumpboxSAMIPrincipalId
   }
 }
 
