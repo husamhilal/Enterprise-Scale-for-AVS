@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "9373098537454603141"
+      "templateHash": "12382689539591334303"
     }
   },
   "parameters": {
@@ -47,6 +47,13 @@
       "defaultValue": false,
       "metadata": {
         "description": "Optional: Connectivity to Internet through Managed SNAT Service"
+      }
+    },
+    "AssignJumpboxAsAVSContributor": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Optional: Assign Jumpbox VM as Contributor on AVS Private Cloud"
       }
     },
     "PrivateCloudHostCount": {
@@ -1054,6 +1061,114 @@
       ]
     },
     {
+      "condition": "[parameters('AssignJumpboxAsAVSContributor')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[format('{0}-Contributor-RBAC', variables('deploymentPrefix'))]",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "PrivateCloudName": {
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-AVS', variables('deploymentPrefix'))), '2020-10-01').outputs.PrivateCloudName.value]"
+          },
+          "PrivateCloudResourceGroup": {
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-AVS', variables('deploymentPrefix'))), '2020-10-01').outputs.PrivateCloudResourceGroupName.value]"
+          },
+          "JumpboxSAMIPrincipalId": {
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-Jumpbox', variables('deploymentPrefix'))), '2020-10-01').outputs.JumpboxSAMIPrincipalId.value]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.12.40.16777",
+              "templateHash": "10289669778659779945"
+            }
+          },
+          "parameters": {
+            "PrivateCloudName": {
+              "type": "string"
+            },
+            "PrivateCloudResourceGroup": {
+              "type": "string"
+            },
+            "JumpboxSAMIPrincipalId": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "[format('{0}-Contributor-RBAC', deployment().name)]",
+              "resourceGroup": "[parameters('PrivateCloudResourceGroup')]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "PrivateCloudName": {
+                    "value": "[parameters('PrivateCloudName')]"
+                  },
+                  "JumpboxSAMIPrincipalId": {
+                    "value": "[parameters('JumpboxSAMIPrincipalId')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.12.40.16777",
+                      "templateHash": "7165443820067361537"
+                    }
+                  },
+                  "parameters": {
+                    "PrivateCloudName": {
+                      "type": "string"
+                    },
+                    "JumpboxSAMIPrincipalId": {
+                      "type": "string"
+                    }
+                  },
+                  "variables": {
+                    "contributorRoleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c"
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Authorization/roleAssignments",
+                      "apiVersion": "2022-04-01",
+                      "scope": "[format('Microsoft.AVS/privateClouds/{0}', parameters('PrivateCloudName'))]",
+                      "name": "[guid(resourceId('Microsoft.AVS/privateClouds', parameters('PrivateCloudName')), resourceGroup().id, variables('contributorRoleDefinitionId'))]",
+                      "properties": {
+                        "description": "Jumpbox VM Contributor role assignment to AVS Private Cloud",
+                        "principalId": "[parameters('JumpboxSAMIPrincipalId')]",
+                        "principalType": "ServicePrincipal",
+                        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('contributorRoleDefinitionId'))]"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-AVS', variables('deploymentPrefix')))]",
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-Jumpbox', variables('deploymentPrefix')))]"
+      ]
+    },
+    {
       "condition": "[parameters('DeployJumpbox')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-10-01",
@@ -1112,7 +1227,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.12.40.16777",
-              "templateHash": "1398106719627620934"
+              "templateHash": "16151107016864811313"
             }
           },
           "parameters": {
@@ -1376,7 +1491,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.12.40.16777",
-                      "templateHash": "2772821374702738590"
+                      "templateHash": "4864276325012786853"
                     }
                   },
                   "parameters": {
@@ -1508,6 +1623,10 @@
                     "JumpboxResourceId": {
                       "type": "string",
                       "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('Name'))]"
+                    },
+                    "JumpboxSAMIPrincipalId": {
+                      "type": "string",
+                      "value": "[reference(resourceId('Microsoft.Compute/virtualMachines', variables('Name')), '2021-03-01', 'full').identity.principalId]"
                     }
                   }
                 }
@@ -1522,6 +1641,10 @@
             "JumpboxResourceId": {
               "type": "string",
               "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-Jumpbox', parameters('Prefix'))), 'Microsoft.Resources/deployments', format('{0}-VM', deployment().name)), '2020-10-01').outputs.JumpboxResourceId.value]"
+            },
+            "JumpboxSAMIPrincipalId": {
+              "type": "string",
+              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-Jumpbox', parameters('Prefix'))), 'Microsoft.Resources/deployments', format('{0}-VM', deployment().name)), '2020-10-01').outputs.JumpboxSAMIPrincipalId.value]"
             }
           }
         }

@@ -60,3 +60,4 @@ module VM 'JumpBox/JumpBoxVM.bicep' = {
 }
 
 output JumpboxResourceId string = VM.outputs.JumpboxResourceId
+output JumpboxSAMIPrincipalId string = VM.outputs.JumpboxSAMIPrincipalId
