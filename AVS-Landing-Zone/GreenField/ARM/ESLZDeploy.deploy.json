@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "12382689539591334303"
+      "templateHash": "12579833208249342564"
     }
   },
   "parameters": {
@@ -247,7 +247,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.12.40.16777",
-              "templateHash": "562985022100818382"
+              "templateHash": "11990423603147681222"
             }
           },
           "parameters": {
@@ -314,7 +314,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.12.40.16777",
-                      "templateHash": "10759840523081130985"
+                      "templateHash": "9720463532879307334"
                     }
                   },
                   "parameters": {
@@ -353,31 +353,9 @@
                         "networkBlock": "[parameters('NetworkBlock')]",
                         "managementCluster": {
                           "clusterSize": "[parameters('ManagementClusterSize')]"
-                        }
-                      }
-                    },
-                    {
-                      "condition": "[parameters('EnableInternet')]",
-                      "type": "Microsoft.AVS/privateClouds",
-                      "apiVersion": "2021-12-01",
-                      "name": "[format('{0}-SDDC', parameters('Prefix'))]",
-                      "sku": {
-                        "name": "[parameters('SKUName')]"
-                      },
-                      "identity": {
-                        "type": "SystemAssigned"
-                      },
-                      "location": "[parameters('Location')]",
-                      "properties": {
-                        "networkBlock": "[parameters('NetworkBlock')]",
-                        "managementCluster": {
-                          "clusterSize": "[parameters('ManagementClusterSize')]"
                         },
-                        "internet": "Enabled"
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.AVS/privateClouds', format('{0}-SDDC', parameters('Prefix')))]"
-                      ]
+                        "internet": "[if(parameters('EnableInternet'), 'Enabled', 'Disabled')]"
+                      }
                     }
                   ],
                   "outputs": {
