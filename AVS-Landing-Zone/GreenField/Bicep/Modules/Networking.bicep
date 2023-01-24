@@ -5,10 +5,21 @@ param Prefix string
 param VNetExists bool
 param VNetAddressSpace string
 param VNetGatewaySubnet string
+param PolicyAssignmentName string
+param PolicyDefinitionID string
 
 resource NetworkResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${Prefix}-Network'
   location: Location
+}
+
+module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
+  scope: NetworkResourceGroup
+  name: '${PolicyAssignmentName}-Assignment-On-${NetworkResourceGroup.name}'
+  params: {
+    policyAssignmentName: PolicyAssignmentName
+    policyDefinitionID: PolicyDefinitionID
+  }
 }
 
 module Network 'Networking/VNetWithGW.bicep' = {

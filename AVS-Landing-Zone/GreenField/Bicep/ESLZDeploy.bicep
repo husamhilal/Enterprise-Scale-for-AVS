@@ -99,6 +99,8 @@ param TelemetryOptOut bool = false
 var deploymentPrefix = 'AVS-${uniqueString(deployment().name, Location)}'
 var varCuaid = '754599a0-0a6f-424a-b4c5-1b12be198ae8'
 
+param PolicyAssignmentName string = 'deny-public-ip-on-network-interface'
+param PolicyDefinitionID string = '/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114'
 
 module AVSCore 'Modules/AVSCore.bicep' = {
   name: '${deploymentPrefix}-AVS'
@@ -109,6 +111,8 @@ module AVSCore 'Modules/AVSCore.bicep' = {
     PrivateCloudHostCount: PrivateCloudHostCount
     PrivateCloudSKU: PrivateCloudSKU
     EnableInternet: EnableInternet
+    PolicyAssignmentName: PolicyAssignmentName
+    PolicyDefinitionID: PolicyDefinitionID
   }
 }
 
@@ -120,6 +124,8 @@ module Networking 'Modules/Networking.bicep' = {
     VNetExists: VNetExists
     VNetAddressSpace: VNetAddressSpace
     VNetGatewaySubnet: VNetGatewaySubnet
+    PolicyAssignmentName: PolicyAssignmentName
+    PolicyDefinitionID: PolicyDefinitionID
   }
 }
 
@@ -172,6 +178,8 @@ module Jumpbox 'Modules/JumpBox.bicep' = if (DeployJumpbox) {
     BootstrapJumpboxVM: BootstrapJumpboxVM
     BootstrapPath: BootstrapPath
     BootstrapCommand: BootstrapCommand
+    PolicyAssignmentName: PolicyAssignmentName
+    PolicyDefinitionID: PolicyDefinitionID
   }
 }
 
@@ -186,6 +194,8 @@ module OperationalMonitoring 'Modules/Monitoring.bicep' = {
     JumpboxResourceId: DeployJumpbox ? Jumpbox.outputs.JumpboxResourceId : ''
     VNetResourceId: Networking.outputs.VNetResourceId
     ExRConnectionResourceId: VNetConnection.outputs.ExRConnectionResourceId
+    PolicyAssignmentName: PolicyAssignmentName
+    PolicyDefinitionID: PolicyDefinitionID
   }
 }
 

@@ -15,6 +15,8 @@ param BootstrapJumpboxVM bool = false
 param BootstrapPath string
 param BootstrapCommand string
 param BastionSubnet string
+param PolicyAssignmentName string
+param PolicyDefinitionID string
 
 
 module Subnet 'JumpBox/JumpBoxSubnet.bicep' = {
@@ -30,6 +32,15 @@ module Subnet 'JumpBox/JumpBoxSubnet.bicep' = {
 resource JumpboxResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' ={
   name: '${Prefix}-Jumpbox'
   location: Location
+}
+
+module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
+  scope: JumpboxResourceGroup
+  name: '${PolicyAssignmentName}-Assignment-On-${JumpboxResourceGroup.name}'
+  params: {
+    policyAssignmentName: PolicyAssignmentName
+    policyDefinitionID: PolicyDefinitionID
+  }
 }
 
 module Bastion 'JumpBox/Bastion.bicep' = {
