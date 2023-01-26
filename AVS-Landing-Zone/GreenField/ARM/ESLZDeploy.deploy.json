@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.13.1.58284",
-      "templateHash": "3799239358579557443"
+      "templateHash": "15122625043923899762"
     }
   },
   "parameters": {
@@ -206,7 +206,7 @@
     },
     "PolicyAssignmentName": {
       "type": "string",
-      "defaultValue": "deny-pip-on-nic"
+      "defaultValue": "DenyPIPonNIC "
     },
     "PolicyDefinitionID": {
       "type": "string",
@@ -261,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.13.1.58284",
-              "templateHash": "12015861799628691158"
+              "templateHash": "9894751016937842456"
             }
           },
           "parameters": {
@@ -309,7 +309,7 @@
                 "mode": "Incremental",
                 "parameters": {
                   "policyAssignmentName": {
-                    "value": "[parameters('PolicyAssignmentName')]"
+                    "value": "[format('{0}-{1}-AVS', parameters('PolicyAssignmentName'), parameters('Prefix'))]"
                   },
                   "policyDefinitionID": {
                     "value": "[parameters('PolicyDefinitionID')]"
@@ -510,7 +510,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.13.1.58284",
-              "templateHash": "7663446886221981663"
+              "templateHash": "16820449624542624577"
             }
           },
           "parameters": {
@@ -555,7 +555,7 @@
                 "mode": "Incremental",
                 "parameters": {
                   "policyAssignmentName": {
-                    "value": "[parameters('PolicyAssignmentName')]"
+                    "value": "[format('{0}-{1}-NET', parameters('PolicyAssignmentName'), parameters('Prefix'))]"
                   },
                   "policyDefinitionID": {
                     "value": "[parameters('PolicyDefinitionID')]"
@@ -1359,7 +1359,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.13.1.58284",
-              "templateHash": "8815173630994883133"
+              "templateHash": "14643322682291518497"
             }
           },
           "parameters": {
@@ -1505,7 +1505,7 @@
                 "mode": "Incremental",
                 "parameters": {
                   "policyAssignmentName": {
-                    "value": "[parameters('PolicyAssignmentName')]"
+                    "value": "[format('{0}-{1}-JB', parameters('PolicyAssignmentName'), parameters('Prefix'))]"
                   },
                   "policyDefinitionID": {
                     "value": "[parameters('PolicyDefinitionID')]"
@@ -1896,7 +1896,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.13.1.58284",
-              "templateHash": "649077485327919517"
+              "templateHash": "9756744019689878679"
             }
           },
           "parameters": {
@@ -1950,7 +1950,7 @@
                 "mode": "Incremental",
                 "parameters": {
                   "policyAssignmentName": {
-                    "value": "[parameters('PolicyAssignmentName')]"
+                    "value": "[format('{0}-{1}-MON', parameters('PolicyAssignmentName'), parameters('Prefix'))]"
                   },
                   "policyDefinitionID": {
                     "value": "[parameters('PolicyDefinitionID')]"
