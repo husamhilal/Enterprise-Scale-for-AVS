@@ -18,7 +18,7 @@ resource OperationalResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01
 
 module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
   scope: OperationalResourceGroup
-  name: '${PolicyAssignmentName}-Assignment-On-${OperationalResourceGroup.name}'
+  name: '${PolicyAssignmentName}-MonitoringRG'
   params: {
     policyAssignmentName: PolicyAssignmentName
     policyDefinitionID: PolicyDefinitionID

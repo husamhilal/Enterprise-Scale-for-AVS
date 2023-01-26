@@ -36,7 +36,7 @@ resource JumpboxResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' ={
 
 module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
   scope: JumpboxResourceGroup
-  name: '${PolicyAssignmentName}-Assignment-On-${JumpboxResourceGroup.name}'
+  name: '${PolicyAssignmentName}-JumpboxVMRG'
   params: {
     policyAssignmentName: PolicyAssignmentName
     policyDefinitionID: PolicyDefinitionID

@@ -15,7 +15,7 @@ resource NetworkResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = 
 
 module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
   scope: NetworkResourceGroup
-  name: '${PolicyAssignmentName}-Assignment-On-${NetworkResourceGroup.name}'
+  name: '${PolicyAssignmentName}-NetworkingRG'
   params: {
     policyAssignmentName: PolicyAssignmentName
     policyDefinitionID: PolicyDefinitionID

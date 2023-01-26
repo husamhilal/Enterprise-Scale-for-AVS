@@ -16,7 +16,7 @@ resource PrivateCloudResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-0
 
 module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
   scope: PrivateCloudResourceGroup
-  name: '${PolicyAssignmentName}-Assignment-On-${PrivateCloudResourceGroup.name}'
+  name: '${PolicyAssignmentName}-AVSRG'
   params: {
     policyAssignmentName: PolicyAssignmentName
     policyDefinitionID: PolicyDefinitionID

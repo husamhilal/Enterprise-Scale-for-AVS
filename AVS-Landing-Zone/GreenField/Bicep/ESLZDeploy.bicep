@@ -95,12 +95,12 @@ param VRServerCount int = 1
 @description('Opt-out of deployment telemetry')
 param TelemetryOptOut bool = false
 
+param PolicyAssignmentName string = 'deny-pip-on-nic'
+param PolicyDefinitionID string = '/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114'
+
 //Variables
 var deploymentPrefix = 'AVS-${uniqueString(deployment().name, Location)}'
 var varCuaid = '754599a0-0a6f-424a-b4c5-1b12be198ae8'
-
-param PolicyAssignmentName string = 'deny-public-ip-on-network-interface'
-param PolicyDefinitionID string = '/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114'
 
 module AVSCore 'Modules/AVSCore.bicep' = {
   name: '${deploymentPrefix}-AVS'
