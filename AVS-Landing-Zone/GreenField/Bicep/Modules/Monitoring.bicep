@@ -20,7 +20,7 @@ module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
   scope: OperationalResourceGroup
   name: '${PolicyAssignmentName}-MonitoringRG'
   params: {
-    policyAssignmentName: PolicyAssignmentName
+    policyAssignmentName: '${PolicyAssignmentName}-${Prefix}-MON'
     policyDefinitionID: PolicyDefinitionID
   }
 }

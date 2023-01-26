@@ -18,7 +18,7 @@ module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
   scope: PrivateCloudResourceGroup
   name: '${PolicyAssignmentName}-AVSRG'
   params: {
-    policyAssignmentName: PolicyAssignmentName
+    policyAssignmentName: '${PolicyAssignmentName}-${Prefix}-AVS'
     policyDefinitionID: PolicyDefinitionID
   }
 }

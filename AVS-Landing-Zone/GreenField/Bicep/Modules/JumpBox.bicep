@@ -38,7 +38,7 @@ module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
   scope: JumpboxResourceGroup
   name: '${PolicyAssignmentName}-JumpboxVMRG'
   params: {
-    policyAssignmentName: PolicyAssignmentName
+    policyAssignmentName: '${PolicyAssignmentName}-${Prefix}-JB'
     policyDefinitionID: PolicyDefinitionID
   }
 }

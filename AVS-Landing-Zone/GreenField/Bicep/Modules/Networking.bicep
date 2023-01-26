@@ -17,7 +17,7 @@ module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
   scope: NetworkResourceGroup
   name: '${PolicyAssignmentName}-NetworkingRG'
   params: {
-    policyAssignmentName: PolicyAssignmentName
+    policyAssignmentName: '${PolicyAssignmentName}-${Prefix}-NET'
     policyDefinitionID: PolicyDefinitionID
   }
 }

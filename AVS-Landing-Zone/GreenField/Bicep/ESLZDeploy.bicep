@@ -95,7 +95,7 @@ param VRServerCount int = 1
 @description('Opt-out of deployment telemetry')
 param TelemetryOptOut bool = false
 
-param PolicyAssignmentName string = 'deny-pip-on-nic'
+param PolicyAssignmentName string = 'DenyPIPonNIC '
 param PolicyDefinitionID string = '/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114'
 
 //Variables
