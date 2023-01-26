@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.13.1.58284",
-      "templateHash": "15052029763180928225"
+      "templateHash": "3799239358579557443"
     }
   },
   "parameters": {
@@ -206,7 +206,7 @@
     },
     "PolicyAssignmentName": {
       "type": "string",
-      "defaultValue": "deny-public-ip-on-network-interface"
+      "defaultValue": "deny-pip-on-nic"
     },
     "PolicyDefinitionID": {
       "type": "string",
@@ -261,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.13.1.58284",
-              "templateHash": "7908464796966798199"
+              "templateHash": "12015861799628691158"
             }
           },
           "parameters": {
@@ -300,7 +300,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2020-10-01",
-              "name": "[format('{0}-Assignment-On-{1}', parameters('PolicyAssignmentName'), format('{0}-PrivateCloud', parameters('Prefix')))]",
+              "name": "[format('{0}-AVSRG', parameters('PolicyAssignmentName'))]",
               "resourceGroup": "[format('{0}-PrivateCloud', parameters('Prefix'))]",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -510,7 +510,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.13.1.58284",
-              "templateHash": "2533811219098156623"
+              "templateHash": "7663446886221981663"
             }
           },
           "parameters": {
@@ -546,7 +546,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2020-10-01",
-              "name": "[format('{0}-Assignment-On-{1}', parameters('PolicyAssignmentName'), format('{0}-Network', parameters('Prefix')))]",
+              "name": "[format('{0}-NetworkingRG', parameters('PolicyAssignmentName'))]",
               "resourceGroup": "[format('{0}-Network', parameters('Prefix'))]",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -1359,7 +1359,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.13.1.58284",
-              "templateHash": "13368057750205508653"
+              "templateHash": "8815173630994883133"
             }
           },
           "parameters": {
@@ -1496,7 +1496,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2020-10-01",
-              "name": "[format('{0}-Assignment-On-{1}', parameters('PolicyAssignmentName'), format('{0}-Jumpbox', parameters('Prefix')))]",
+              "name": "[format('{0}-JumpboxVMRG', parameters('PolicyAssignmentName'))]",
               "resourceGroup": "[format('{0}-Jumpbox', parameters('Prefix'))]",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -1896,7 +1896,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.13.1.58284",
-              "templateHash": "7494991648980489340"
+              "templateHash": "649077485327919517"
             }
           },
           "parameters": {
@@ -1941,7 +1941,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2020-10-01",
-              "name": "[format('{0}-Assignment-On-{1}', parameters('PolicyAssignmentName'), format('{0}-Operational', parameters('Prefix')))]",
+              "name": "[format('{0}-MonitoringRG', parameters('PolicyAssignmentName'))]",
               "resourceGroup": "[format('{0}-Operational', parameters('Prefix'))]",
               "properties": {
                 "expressionEvaluationOptions": {
