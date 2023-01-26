@@ -11,8 +11,8 @@
         "PrivateCloudSKU": {
             "value": "AV36"
         },
-        "Internet": {
-            "value": "Disabled"
+        "EnableInternet": {
+            "value": false
         },
         "PrivateCloudHostCount": {
             "value": 3
