@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.12.40.16777",
-      "templateHash": "12579833208249342564"
+      "version": "0.13.1.58284",
+      "templateHash": "15052029763180928225"
     }
   },
   "parameters": {
@@ -203,6 +203,14 @@
       "metadata": {
         "description": "Opt-out of deployment telemetry"
       }
+    },
+    "PolicyAssignmentName": {
+      "type": "string",
+      "defaultValue": "deny-public-ip-on-network-interface"
+    },
+    "PolicyDefinitionID": {
+      "type": "string",
+      "defaultValue": "/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114"
     }
   },
   "variables": {
@@ -238,6 +246,12 @@
           },
           "EnableInternet": {
             "value": "[parameters('EnableInternet')]"
+          },
+          "PolicyAssignmentName": {
+            "value": "[parameters('PolicyAssignmentName')]"
+          },
+          "PolicyDefinitionID": {
+            "value": "[parameters('PolicyDefinitionID')]"
           }
         },
         "template": {
@@ -246,8 +260,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.12.40.16777",
-              "templateHash": "11990423603147681222"
+              "version": "0.13.1.58284",
+              "templateHash": "7908464796966798199"
             }
           },
           "parameters": {
@@ -268,6 +282,12 @@
             },
             "EnableInternet": {
               "type": "bool"
+            },
+            "PolicyAssignmentName": {
+              "type": "string"
+            },
+            "PolicyDefinitionID": {
+              "type": "string"
             }
           },
           "resources": [
@@ -276,6 +296,64 @@
               "apiVersion": "2021-04-01",
               "name": "[format('{0}-PrivateCloud', parameters('Prefix'))]",
               "location": "[parameters('Location')]"
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "[format('{0}-Assignment-On-{1}', parameters('PolicyAssignmentName'), format('{0}-PrivateCloud', parameters('Prefix')))]",
+              "resourceGroup": "[format('{0}-PrivateCloud', parameters('Prefix'))]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "policyAssignmentName": {
+                    "value": "[parameters('PolicyAssignmentName')]"
+                  },
+                  "policyDefinitionID": {
+                    "value": "[parameters('PolicyDefinitionID')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.13.1.58284",
+                      "templateHash": "3298925150841582164"
+                    }
+                  },
+                  "parameters": {
+                    "policyAssignmentName": {
+                      "type": "string"
+                    },
+                    "policyDefinitionID": {
+                      "type": "string"
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Authorization/policyAssignments",
+                      "apiVersion": "2022-06-01",
+                      "name": "[parameters('policyAssignmentName')]",
+                      "properties": {
+                        "policyDefinitionId": "[parameters('policyDefinitionID')]"
+                      }
+                    }
+                  ],
+                  "outputs": {
+                    "assignmentId": {
+                      "type": "string",
+                      "value": "[resourceId('Microsoft.Authorization/policyAssignments', parameters('policyAssignmentName'))]"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-PrivateCloud', parameters('Prefix')))]"
+              ]
             },
             {
               "type": "Microsoft.Resources/deployments",
@@ -313,8 +391,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "9720463532879307334"
+                      "version": "0.13.1.58284",
+                      "templateHash": "2381218746606111928"
                     }
                   },
                   "parameters": {
@@ -417,6 +495,12 @@
           },
           "VNetGatewaySubnet": {
             "value": "[parameters('VNetGatewaySubnet')]"
+          },
+          "PolicyAssignmentName": {
+            "value": "[parameters('PolicyAssignmentName')]"
+          },
+          "PolicyDefinitionID": {
+            "value": "[parameters('PolicyDefinitionID')]"
           }
         },
         "template": {
@@ -425,8 +509,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.12.40.16777",
-              "templateHash": "17346319819616371009"
+              "version": "0.13.1.58284",
+              "templateHash": "2533811219098156623"
             }
           },
           "parameters": {
@@ -444,6 +528,12 @@
             },
             "VNetGatewaySubnet": {
               "type": "string"
+            },
+            "PolicyAssignmentName": {
+              "type": "string"
+            },
+            "PolicyDefinitionID": {
+              "type": "string"
             }
           },
           "resources": [
@@ -452,6 +542,64 @@
               "apiVersion": "2021-04-01",
               "name": "[format('{0}-Network', parameters('Prefix'))]",
               "location": "[parameters('Location')]"
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "[format('{0}-Assignment-On-{1}', parameters('PolicyAssignmentName'), format('{0}-Network', parameters('Prefix')))]",
+              "resourceGroup": "[format('{0}-Network', parameters('Prefix'))]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "policyAssignmentName": {
+                    "value": "[parameters('PolicyAssignmentName')]"
+                  },
+                  "policyDefinitionID": {
+                    "value": "[parameters('PolicyDefinitionID')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.13.1.58284",
+                      "templateHash": "3298925150841582164"
+                    }
+                  },
+                  "parameters": {
+                    "policyAssignmentName": {
+                      "type": "string"
+                    },
+                    "policyDefinitionID": {
+                      "type": "string"
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Authorization/policyAssignments",
+                      "apiVersion": "2022-06-01",
+                      "name": "[parameters('policyAssignmentName')]",
+                      "properties": {
+                        "policyDefinitionId": "[parameters('policyDefinitionID')]"
+                      }
+                    }
+                  ],
+                  "outputs": {
+                    "assignmentId": {
+                      "type": "string",
+                      "value": "[resourceId('Microsoft.Authorization/policyAssignments', parameters('policyAssignmentName'))]"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-Network', parameters('Prefix')))]"
+              ]
             },
             {
               "type": "Microsoft.Resources/deployments",
@@ -486,8 +634,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "4982914002375130930"
+                      "version": "0.13.1.58284",
+                      "templateHash": "2506527524176419111"
                     }
                   },
                   "parameters": {
@@ -667,8 +815,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.12.40.16777",
-              "templateHash": "17173650692111180434"
+              "version": "0.13.1.58284",
+              "templateHash": "15285762966790997689"
             }
           },
           "parameters": {
@@ -720,8 +868,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "2016764342565517829"
+                      "version": "0.13.1.58284",
+                      "templateHash": "13393456386099223482"
                     }
                   },
                   "parameters": {
@@ -785,8 +933,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "14526189753873391122"
+                      "version": "0.13.1.58284",
+                      "templateHash": "7493869444158930583"
                     }
                   },
                   "parameters": {
@@ -888,8 +1036,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.12.40.16777",
-              "templateHash": "7799640121873753426"
+              "version": "0.13.1.58284",
+              "templateHash": "15651273478884412967"
             }
           },
           "parameters": {
@@ -937,8 +1085,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "15240701319405911237"
+                      "version": "0.13.1.58284",
+                      "templateHash": "15079647557696163217"
                     }
                   },
                   "parameters": {
@@ -988,8 +1136,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "13767508214572317221"
+                      "version": "0.13.1.58284",
+                      "templateHash": "15491256274215119088"
                     }
                   },
                   "parameters": {
@@ -1066,8 +1214,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.12.40.16777",
-              "templateHash": "10289669778659779945"
+              "version": "0.13.1.58284",
+              "templateHash": "10747667496691561318"
             }
           },
           "parameters": {
@@ -1106,8 +1254,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "7165443820067361537"
+                      "version": "0.13.1.58284",
+                      "templateHash": "7540520603546143750"
                     }
                   },
                   "parameters": {
@@ -1196,6 +1344,12 @@
           },
           "BootstrapCommand": {
             "value": "[parameters('BootstrapCommand')]"
+          },
+          "PolicyAssignmentName": {
+            "value": "[parameters('PolicyAssignmentName')]"
+          },
+          "PolicyDefinitionID": {
+            "value": "[parameters('PolicyDefinitionID')]"
           }
         },
         "template": {
@@ -1204,8 +1358,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.12.40.16777",
-              "templateHash": "16151107016864811313"
+              "version": "0.13.1.58284",
+              "templateHash": "13368057750205508653"
             }
           },
           "parameters": {
@@ -1248,6 +1402,12 @@
             },
             "BastionSubnet": {
               "type": "string"
+            },
+            "PolicyAssignmentName": {
+              "type": "string"
+            },
+            "PolicyDefinitionID": {
+              "type": "string"
             }
           },
           "resources": [
@@ -1284,8 +1444,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "11407511128822144955"
+                      "version": "0.13.1.58284",
+                      "templateHash": "13437231748676257870"
                     }
                   },
                   "parameters": {
@@ -1336,6 +1496,64 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2020-10-01",
+              "name": "[format('{0}-Assignment-On-{1}', parameters('PolicyAssignmentName'), format('{0}-Jumpbox', parameters('Prefix')))]",
+              "resourceGroup": "[format('{0}-Jumpbox', parameters('Prefix'))]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "policyAssignmentName": {
+                    "value": "[parameters('PolicyAssignmentName')]"
+                  },
+                  "policyDefinitionID": {
+                    "value": "[parameters('PolicyDefinitionID')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.13.1.58284",
+                      "templateHash": "3298925150841582164"
+                    }
+                  },
+                  "parameters": {
+                    "policyAssignmentName": {
+                      "type": "string"
+                    },
+                    "policyDefinitionID": {
+                      "type": "string"
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Authorization/policyAssignments",
+                      "apiVersion": "2022-06-01",
+                      "name": "[parameters('policyAssignmentName')]",
+                      "properties": {
+                        "policyDefinitionId": "[parameters('policyDefinitionID')]"
+                      }
+                    }
+                  ],
+                  "outputs": {
+                    "assignmentId": {
+                      "type": "string",
+                      "value": "[resourceId('Microsoft.Authorization/policyAssignments', parameters('policyAssignmentName'))]"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-Jumpbox', parameters('Prefix')))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
               "name": "[format('{0}-Bastion', deployment().name)]",
               "resourceGroup": "[format('{0}-Jumpbox', parameters('Prefix'))]",
               "properties": {
@@ -1360,8 +1578,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "16677629607985843545"
+                      "version": "0.13.1.58284",
+                      "templateHash": "15401770795839921663"
                     }
                   },
                   "parameters": {
@@ -1468,8 +1686,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "4864276325012786853"
+                      "version": "0.13.1.58284",
+                      "templateHash": "584224739362528892"
                     }
                   },
                   "parameters": {
@@ -1657,14 +1875,18 @@
           "PrimaryPrivateCloudResourceId": {
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-AVS', variables('deploymentPrefix'))), '2020-10-01').outputs.PrivateCloudResourceId.value]"
           },
-          "JumpboxResourceId": {
-            "value": "[if(parameters('DeployJumpbox'), reference(subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-Jumpbox', variables('deploymentPrefix'))), '2020-10-01').outputs.JumpboxResourceId.value, '')]"
-          },
+          "JumpboxResourceId": "[if(parameters('DeployJumpbox'), createObject('value', reference(subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-Jumpbox', variables('deploymentPrefix'))), '2020-10-01').outputs.JumpboxResourceId.value), createObject('value', ''))]",
           "VNetResourceId": {
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-Network', variables('deploymentPrefix'))), '2020-10-01').outputs.VNetResourceId.value]"
           },
           "ExRConnectionResourceId": {
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('{0}-VNet', variables('deploymentPrefix'))), '2020-10-01').outputs.ExRConnectionResourceId.value]"
+          },
+          "PolicyAssignmentName": {
+            "value": "[parameters('PolicyAssignmentName')]"
+          },
+          "PolicyDefinitionID": {
+            "value": "[parameters('PolicyDefinitionID')]"
           }
         },
         "template": {
@@ -1673,8 +1895,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.12.40.16777",
-              "templateHash": "1028080038008195615"
+              "version": "0.13.1.58284",
+              "templateHash": "7494991648980489340"
             }
           },
           "parameters": {
@@ -1701,6 +1923,12 @@
             },
             "ExRConnectionResourceId": {
               "type": "string"
+            },
+            "PolicyAssignmentName": {
+              "type": "string"
+            },
+            "PolicyDefinitionID": {
+              "type": "string"
             }
           },
           "resources": [
@@ -1709,6 +1937,64 @@
               "apiVersion": "2021-04-01",
               "name": "[format('{0}-Operational', parameters('Prefix'))]",
               "location": "[parameters('PrimaryLocation')]"
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "[format('{0}-Assignment-On-{1}', parameters('PolicyAssignmentName'), format('{0}-Operational', parameters('Prefix')))]",
+              "resourceGroup": "[format('{0}-Operational', parameters('Prefix'))]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "policyAssignmentName": {
+                    "value": "[parameters('PolicyAssignmentName')]"
+                  },
+                  "policyDefinitionID": {
+                    "value": "[parameters('PolicyDefinitionID')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.13.1.58284",
+                      "templateHash": "3298925150841582164"
+                    }
+                  },
+                  "parameters": {
+                    "policyAssignmentName": {
+                      "type": "string"
+                    },
+                    "policyDefinitionID": {
+                      "type": "string"
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Authorization/policyAssignments",
+                      "apiVersion": "2022-06-01",
+                      "name": "[parameters('policyAssignmentName')]",
+                      "properties": {
+                        "policyDefinitionId": "[parameters('policyDefinitionID')]"
+                      }
+                    }
+                  ],
+                  "outputs": {
+                    "assignmentId": {
+                      "type": "string",
+                      "value": "[resourceId('Microsoft.Authorization/policyAssignments', parameters('policyAssignmentName'))]"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-Operational', parameters('Prefix')))]"
+              ]
             },
             {
               "type": "Microsoft.Resources/deployments",
@@ -1734,8 +2020,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "9458976635556524940"
+                      "version": "0.13.1.58284",
+                      "templateHash": "3424348488307849077"
                     }
                   },
                   "parameters": {
@@ -1809,8 +2095,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "16153728326675910729"
+                      "version": "0.13.1.58284",
+                      "templateHash": "5192091329783406650"
                     }
                   },
                   "parameters": {
@@ -1944,8 +2230,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "13119261199227016473"
+                      "version": "0.13.1.58284",
+                      "templateHash": "17856255522799574157"
                     }
                   },
                   "parameters": {
@@ -2045,8 +2331,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.12.40.16777",
-                      "templateHash": "875780355517483937"
+                      "version": "0.13.1.58284",
+                      "templateHash": "10488698185454861146"
                     }
                   },
                   "parameters": {
@@ -2480,8 +2766,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.12.40.16777",
-              "templateHash": "14727788132074548598"
+              "version": "0.13.1.58284",
+              "templateHash": "12837212391775155495"
             }
           },
           "resources": []
