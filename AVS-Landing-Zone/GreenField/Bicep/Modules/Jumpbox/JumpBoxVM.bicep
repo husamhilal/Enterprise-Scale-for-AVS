@@ -28,6 +28,7 @@ resource Nic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
         }
       }
     ]
+    enableAcceleratedNetworking: true
   }
 }
 
