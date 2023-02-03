@@ -6,7 +6,8 @@ param Username string
 param Password string
 param VMSize string
 param OSVersion string
-param BootstrapVM bool = false
+param EnableHighPerformance bool
+param BootstrapJumpboxVM bool
 param BootstrapPath string = ''
 param BootstrapCommand string = ''
 
@@ -28,11 +29,11 @@ resource Nic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
         }
       }
     ]
-    enableAcceleratedNetworking: true
+    enableAcceleratedNetworking: EnableHighPerformance ? true : false
   }
 }
 
-resource VM 'Microsoft.Compute/virtualMachines@2021-03-01' = {
+resource VM 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   name: Name
   location: Location
   identity: {
@@ -57,7 +58,7 @@ resource VM 'Microsoft.Compute/virtualMachines@2021-03-01' = {
       osDisk: {
         createOption: 'FromImage'
         managedDisk: {
-          storageAccountType: 'Premium_LRS'
+          storageAccountType: EnableHighPerformance ? 'Premium_LRS' : 'Standard_LRS'
         }
       }
     }
@@ -71,7 +72,7 @@ resource VM 'Microsoft.Compute/virtualMachines@2021-03-01' = {
   }
 }
 
-resource Bootstrap 'Microsoft.Compute/virtualMachines/extensions@2021-04-01' = if(BootstrapVM) {
+resource Bootstrap 'Microsoft.Compute/virtualMachines/extensions@2021-04-01' = if(BootstrapJumpboxVM) {
   name: '${VM.name}/CustomScriptExtension'
   location: Location
   properties: {
