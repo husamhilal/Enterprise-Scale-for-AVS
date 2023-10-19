@@ -6,6 +6,7 @@ param PrivateCloudAddressSpace string
 param PrivateCloudSKU string
 param PrivateCloudHostCount int
 param EnableInternet bool
+param AssignPolicy bool
 param PolicyAssignmentName string
 param PolicyDefinitionID string
 
@@ -14,7 +15,7 @@ resource PrivateCloudResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-0
   location: Location
 }
 
-module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
+module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= if (AssignPolicy){
   scope: PrivateCloudResourceGroup
   name: '${PolicyAssignmentName}-AVSRG'
   params: {

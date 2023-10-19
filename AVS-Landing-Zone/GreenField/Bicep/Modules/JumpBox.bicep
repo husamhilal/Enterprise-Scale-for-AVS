@@ -16,6 +16,7 @@ param BootstrapJumpboxVM bool = false
 param BootstrapPath string
 param BootstrapCommand string
 param BastionSubnet string
+param AssignPolicy bool
 param PolicyAssignmentName string
 param PolicyDefinitionID string
 
@@ -35,7 +36,7 @@ resource JumpboxResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' ={
   location: Location
 }
 
-module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
+module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= if (AssignPolicy) {
   scope: JumpboxResourceGroup
   name: '${PolicyAssignmentName}-JumpboxVMRG'
   params: {

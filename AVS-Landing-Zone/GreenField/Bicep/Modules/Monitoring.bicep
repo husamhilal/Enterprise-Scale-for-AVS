@@ -8,6 +8,7 @@ param PrimaryPrivateCloudResourceId string
 param JumpboxResourceId string
 param VNetResourceId string
 param ExRConnectionResourceId string
+param AssignPolicy bool
 param PolicyAssignmentName string
 param PolicyDefinitionID string
 
@@ -16,7 +17,7 @@ resource OperationalResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01
   location: PrimaryLocation
 }
 
-module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
+module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= if (AssignPolicy) {
   scope: OperationalResourceGroup
   name: '${PolicyAssignmentName}-MonitoringRG'
   params: {

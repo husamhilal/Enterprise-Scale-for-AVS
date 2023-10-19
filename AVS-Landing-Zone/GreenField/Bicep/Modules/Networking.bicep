@@ -5,6 +5,7 @@ param Prefix string
 param VNetExists bool
 param VNetAddressSpace string
 param VNetGatewaySubnet string
+param AssignPolicy bool
 param PolicyAssignmentName string
 param PolicyDefinitionID string
 
@@ -13,7 +14,7 @@ resource NetworkResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = 
   location: Location
 }
 
-module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= {
+module AzurePolicyAssignment 'Policy/PolicyAssignment.bicep'= if (AssignPolicy){
   scope: NetworkResourceGroup
   name: '${PolicyAssignmentName}-NetworkingRG'
   params: {

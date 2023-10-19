@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.10.61.36676",
-      "templateHash": "1816561379984041547"
+      "version": "0.22.6.54827",
+      "templateHash": "3273748367247959320"
     }
   },
   "parameters": {
@@ -29,13 +29,13 @@
       }
     },
     "ExpressRouteAuthorizationKey": {
-      "type": "secureString",
+      "type": "securestring",
       "metadata": {
         "description": "The Express Route Authorization Key to be redeemed by the connection"
       }
     },
     "ExpressRouteId": {
-      "type": "secureString",
+      "type": "securestring",
       "metadata": {
         "description": "The id of the Express Route to create the connection to"
       }
@@ -65,7 +65,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "[format('pid-{0}-{1}', variables('varCuaid'), uniqueString(resourceGroup().location))]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -79,8 +79,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "4193470495622901480"
+              "version": "0.22.6.54827",
+              "templateHash": "9018524887641986178"
             }
           },
           "resources": []

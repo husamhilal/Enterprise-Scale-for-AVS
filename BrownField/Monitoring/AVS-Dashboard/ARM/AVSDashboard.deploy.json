@@ -4,16 +4,16 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.10.61.36676",
-      "templateHash": "6678732160629112727"
+      "version": "0.22.6.54827",
+      "templateHash": "4058693919647806469"
     }
   },
   "parameters": {
     "DashboardName": {
       "type": "string",
       "defaultValue": "AVS Dashboard",
-      "maxLength": 64,
       "minLength": 1,
+      "maxLength": 64,
       "metadata": {
         "description": "The name of the dashboard to create"
       }
@@ -362,7 +362,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "[format('pid-{0}-{1}', variables('varCuaid'), uniqueString(resourceGroup().location))]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -376,8 +376,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "4193470495622901480"
+              "version": "0.22.6.54827",
+              "templateHash": "9018524887641986178"
             }
           },
           "resources": []

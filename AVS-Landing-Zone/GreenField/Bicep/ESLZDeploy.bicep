@@ -98,6 +98,7 @@ param VRServerCount int = 1
 @description('Opt-out of deployment telemetry')
 param TelemetryOptOut bool = false
 
+param AssignPolicy bool = false
 param PolicyAssignmentName string = 'DenyPIPonNIC'
 param PolicyDefinitionID string = '/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114'
 
@@ -114,6 +115,7 @@ module AVSCore 'Modules/AVSCore.bicep' = {
     PrivateCloudHostCount: PrivateCloudHostCount
     PrivateCloudSKU: PrivateCloudSKU
     EnableInternet: EnableInternet
+    AssignPolicy: AssignPolicy
     PolicyAssignmentName: PolicyAssignmentName
     PolicyDefinitionID: PolicyDefinitionID
   }
@@ -127,6 +129,7 @@ module Networking 'Modules/Networking.bicep' = {
     VNetExists: VNetExists
     VNetAddressSpace: VNetAddressSpace
     VNetGatewaySubnet: VNetGatewaySubnet
+    AssignPolicy: AssignPolicy
     PolicyAssignmentName: PolicyAssignmentName
     PolicyDefinitionID: PolicyDefinitionID
   }
@@ -182,6 +185,7 @@ module Jumpbox 'Modules/JumpBox.bicep' = if (DeployJumpbox) {
     BootstrapJumpboxVM: BootstrapJumpboxVM
     BootstrapPath: BootstrapPath
     BootstrapCommand: BootstrapCommand
+    AssignPolicy: AssignPolicy
     PolicyAssignmentName: PolicyAssignmentName
     PolicyDefinitionID: PolicyDefinitionID
   }
@@ -198,6 +202,7 @@ module OperationalMonitoring 'Modules/Monitoring.bicep' = {
     JumpboxResourceId: DeployJumpbox ? Jumpbox.outputs.JumpboxResourceId : ''
     VNetResourceId: Networking.outputs.VNetResourceId
     ExRConnectionResourceId: VNetConnection.outputs.ExRConnectionResourceId
+    AssignPolicy: AssignPolicy
     PolicyAssignmentName: PolicyAssignmentName
     PolicyDefinitionID: PolicyDefinitionID
   }
