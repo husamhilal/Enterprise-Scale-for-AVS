@@ -15,6 +15,12 @@ param PrivateCloudAddressSpace string
 @allowed([
   'AV36'
   'AV36T'
+  'AV36'
+  'AV36T'
+  'AV36P'
+  'AV36PT'
+  'AV52'
+  'AV64'
 ])
 param PrivateCloudSKU string = 'AV36'
 
