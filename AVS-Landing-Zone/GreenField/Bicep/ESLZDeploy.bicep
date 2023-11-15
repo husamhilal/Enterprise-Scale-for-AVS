@@ -15,8 +15,6 @@ param PrivateCloudAddressSpace string
 @allowed([
   'AV36'
   'AV36T'
-  'AV36'
-  'AV36T'
   'AV36P'
   'AV36PT'
   'AV52'

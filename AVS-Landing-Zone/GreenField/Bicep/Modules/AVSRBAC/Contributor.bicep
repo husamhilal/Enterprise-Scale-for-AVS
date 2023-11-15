@@ -11,7 +11,7 @@ resource JumpboxVMasAVSPrivateCloudContributor 'Microsoft.Authorization/roleAssi
   name: guid(PrivateCloud.id, resourceGroup().id, contributorRoleDefinitionId)
   scope: PrivateCloud
   properties: {
-    description: 'Jumpbox VM Contributor role assignment to AVS Private Cloud'
+    description: 'Jumpbox VM Contributor role assignment on AVS Private Cloud'
     principalId: JumpboxSAMIPrincipalId
     principalType: 'ServicePrincipal'
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions',contributorRoleDefinitionId )
